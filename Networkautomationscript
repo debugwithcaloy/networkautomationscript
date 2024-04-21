@@ -1,0 +1,92 @@
+
+#!/bin/bash
+
+# Function to check network connectivity
+check_network_connectivity() {
+    echo "Checking network connectivity..."
+    ping -c 4 google.com > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo "Network is up."
+    else
+        echo "Network is down."
+    fi
+}
+
+# Function to ping a host
+ping_host() {
+    read -p "Enter the IP address or hostname to ping: " host
+    ping -c 4 $host
+}
+
+# Function to perform a traceroute
+perform_traceroute() {
+    read -p "Enter the IP address or hostname to traceroute: " host
+    traceroute $host
+}
+
+# Function to check port connectivity
+check_port_connectivity() {
+    read -p "Enter the IP address or hostname: " host
+    read -p "Enter the port number: " port
+    nc -zv $host $port
+}
+
+# Function to get network interface information
+get_network_interface_info() {
+    ip -4 addr show | grep inet | awk '{print $2}'
+}
+
+# Function to perform a whois lookup
+perform_whois_lookup() {
+    read -p "Enter the IP address or domain name: " target
+    whois $target
+}
+
+# Function to perform a DNS lookup
+perform_dns_lookup() {
+    read -p "Enter the domain name: " domain
+    dig $domain
+}
+
+# Function to perform an nmap scan
+perform_nmap_scan() {
+    read -p "Enter the IP address or hostname: " target
+    sudo nmap -sV -p- $target
+}
+
+# Function to perform a speed test
+perform_speed_test() {
+    speedtest-cli
+}
+
+# Main menu
+while true; do
+    echo "-------------------------"
+    echo "Network Automation Script"
+    echo "-------------------------"
+    echo "1. Check network connectivity"
+    echo "2. Ping a host"
+    echo "3. Perform a traceroute"
+    echo "4. Check port connectivity"
+    echo "5. Get network interface information"
+    echo "6. Perform a whois lookup"
+    echo "7. Perform a DNS lookup"
+    echo "8. Perform an nmap scan"
+    echo "9. Perform a speed test"
+    echo "10. Exit"
+    read -p "Enter your choice: " choice
+
+    case $choice in
+        1) check_network_connectivity;;
+        2) ping_host;;
+        3) perform_traceroute;;
+        4) check_port_connectivity;;
+        5) get_network_interface_info;;
+        6) perform_whois_lookup;;
+        7) perform_dns_lookup;;
+        8) perform_nmap_scan;;
+        9) perform_speed_test;;
+        10) echo "Exiting..."; break;;
+        *) echo "Invalid choice. Please enter a number between 1 and 10.";;
+    esac
+done
